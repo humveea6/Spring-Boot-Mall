@@ -15,7 +15,7 @@
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/mall?characterEncoding=utf-8"
                         userId="root"
-                        password="">
+                        password="g20170040">
         </jdbcConnection>
 
         <javaTypeResolver >
@@ -42,8 +42,9 @@
 <!--            <ignoreColumn column="FRED" />-->
 <!--            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
 <!--        </table>-->
-        <table tableName="mall_order" domainObjectName="Order"/>
-        <table tableName="mall_order_item" domainObjectName="Orderitem"/>
+<!--        <table tableName="mall_order" domainObjectName="Order"/>-->
+<!--        <table tableName="mall_order_item" domainObjectName="Orderitem"/>-->
+        <table tableName="mall_user" domainObjectName="User"/>
 
     </context>
 </generatorConfiguration>
