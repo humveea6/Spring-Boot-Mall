@@ -1,9 +1,11 @@
 package com.imooc.mall.service.Impl;
 
 import com.imooc.mall.dao.UserMapper;
+import com.imooc.mall.enums.ResponseEnum;
 import com.imooc.mall.pojo.User;
 import com.imooc.mall.pojo.UserExample;
 import com.imooc.mall.service.IUserService;
+import com.imooc.mall.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -23,13 +25,14 @@ public class UserServiceImpl implements IUserService {
     UserMapper writeUserMapper;
 
     @Override
-    public void register(User user) {
+    public ResponseVo register(User user) {
         //username不重复
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andUsernameEqualTo(user.getUsername());
         if (readUserMapper.countByExample(userExample) > 0){
-            throw new RuntimeException("该username已注册");
+//            throw new RuntimeException("该username已注册");
+            return ResponseVo.error(ResponseEnum.USERNAME_EXIST);
         }
 
         //email不重复
@@ -37,7 +40,8 @@ public class UserServiceImpl implements IUserService {
         UserExample.Criteria criteria1 = userExample1.createCriteria();
         criteria1.andEmailEqualTo(user.getEmail());
         if(readUserMapper.countByExample(userExample1) > 0){
-            throw new RuntimeException("该email已被注册");
+//            throw new RuntimeException("该email已被注册");
+            return ResponseVo.error(ResponseEnum.EMAIL_EXIST);
         }
 
         //MD5 摘要
@@ -47,8 +51,10 @@ public class UserServiceImpl implements IUserService {
         //写入数据库
         int resultCount = writeUserMapper.insertSelective(user);
         if (resultCount == 0){
-            throw  new RuntimeException("注册失败");
+//            throw  new RuntimeException("注册失败");
+            return ResponseVo.error(ResponseEnum.ERROR);
         }
 
+        return ResponseVo.success();
     }
 }
