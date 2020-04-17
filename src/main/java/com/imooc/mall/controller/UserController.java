@@ -1,8 +1,9 @@
 package com.imooc.mall.controller;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.imooc.mall.consts.MallConst;
 import com.imooc.mall.enums.ResponseEnum;
-import com.imooc.mall.form.Userform;
+import com.imooc.mall.form.UserLoginform;
+import com.imooc.mall.form.UserRegisterform;
 import com.imooc.mall.pojo.User;
 import com.imooc.mall.service.IUserService;
 import com.imooc.mall.vo.ResponseVo;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -19,24 +21,47 @@ import javax.validation.Valid;
  * Created on 2020-04-14
  */
 @RestController
-@RequestMapping("/user")
 @Slf4j
 public class UserController {
 
     @Autowired
     private IUserService iUserService;
 
-    @PostMapping("/register")
-    public ResponseVo register(@Valid @RequestBody Userform userform,
+    @PostMapping("/user/register")
+    public ResponseVo<User> register(@Valid @RequestBody UserRegisterform userRegisterform,
                                BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.error("参数错误,{}",bindingResult.getFieldError().getDefaultMessage());
             return ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage());
         }
         User user = new User();
-        BeanUtils.copyProperties(userform,user);
+        BeanUtils.copyProperties(userRegisterform,user);
         user.setRole(1);
         return iUserService.register(user);
     }
 
+    @PostMapping("/user/login")
+    public ResponseVo<User> login(@Valid @RequestBody UserLoginform userLoginform,
+                                  BindingResult bindingResult, HttpSession httpSession){
+        if(bindingResult.hasErrors()){
+            return ResponseVo.error(ResponseEnum.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage());
+        }
+
+        ResponseVo<User> userResponseVo = iUserService.login(userLoginform.getUsername(), userLoginform.getPassword());
+
+        //session
+        httpSession.setAttribute(MallConst.CURRENT_USER,userResponseVo.getData());
+
+        return userResponseVo;
+    }
+
+    @GetMapping("/user")
+    public ResponseVo<User> userInfo(HttpSession httpSession){
+        User user = (User)httpSession.getAttribute(MallConst.CURRENT_USER);
+        if(user == null){
+            return ResponseVo.error(ResponseEnum.NEED_LOGIN);
+        }
+
+        return ResponseVo.success(user);
+    }
 }

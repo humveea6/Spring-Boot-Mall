@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -25,7 +26,7 @@ public class UserServiceImpl implements IUserService {
     UserMapper writeUserMapper;
 
     @Override
-    public ResponseVo register(User user) {
+    public ResponseVo<User> register(User user) {
         //username不重复
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
@@ -55,6 +56,27 @@ public class UserServiceImpl implements IUserService {
             return ResponseVo.error(ResponseEnum.ERROR);
         }
 
-        return ResponseVo.success();
+        return ResponseVo.successByMsg();
+    }
+
+    @Override
+    public ResponseVo<User> login(String username, String password) {
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<User> userList = readUserMapper.selectByExample(userExample);
+        if(userList == null){
+            //return error
+            return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+        User user = userList.get(0);
+        if(!user.getPassword().equalsIgnoreCase(DigestUtils.
+                md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))){
+            //password error
+            return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+        user.setPassword("");
+
+        return ResponseVo.success(user);
     }
 }
