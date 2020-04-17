@@ -58,10 +58,15 @@ public class UserController {
     @GetMapping("/user")
     public ResponseVo<User> userInfo(HttpSession httpSession){
         User user = (User)httpSession.getAttribute(MallConst.CURRENT_USER);
-        if(user == null){
-            return ResponseVo.error(ResponseEnum.NEED_LOGIN);
-        }
 
         return ResponseVo.success(user);
     }
+
+    @PostMapping("/user/logout")
+    public ResponseVo logout(HttpSession httpSession){
+        httpSession.removeAttribute(MallConst.CURRENT_USER);
+
+        return ResponseVo.success("退出成功");
+    }
+
 }
