@@ -7,12 +7,12 @@ import com.imooc.mall.pojo.CategoryExample;
 import com.imooc.mall.service.ICategoryService;
 import com.imooc.mall.vo.CategoryVo;
 import com.imooc.mall.vo.ResponseVo;
+import org.apache.logging.log4j.util.PropertySource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements ICategoryService {
             }
         }
         findSubCategory(categoryVoList,categories);
-        
+
         return ResponseVo.success(categoryVoList);
     }
 
@@ -55,7 +55,10 @@ public class CategoryServiceImpl implements ICategoryService {
                 }
             }
 
+            subCategoryVoList.sort(Comparator.comparing(CategoryVo::getSortOrder).reversed());
             categoryVo.setSubCategories(subCategoryVoList);
+
+            findSubCategory(subCategoryVoList,categories);
         }
     }
 
@@ -65,4 +68,23 @@ public class CategoryServiceImpl implements ICategoryService {
         return categoryVo;
     }
 
+    @Override
+    public void findSubCategoryId(Integer id, Set<Integer> resultSet) {
+        CategoryExample categoryExample = new CategoryExample();
+        CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        criteria.andStatusEqualTo(true);
+        List<Category> categories = categoryMapper.selectByExample(categoryExample);
+
+        findSubCategoryId(id,resultSet,categories);
+    }
+
+    private void findSubCategoryId(Integer id, Set<Integer> resultSet,List<Category> categories){
+        for(Category category:categories){
+            if(category.getParentId().equals(id)){
+                resultSet.add(category.getId());
+
+                findSubCategoryId(category.getId(),resultSet,categories);
+            }
+        }
+    }
 }
