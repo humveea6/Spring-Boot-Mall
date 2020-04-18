@@ -44,7 +44,7 @@
 <!--        </table>-->
 <!--        <table tableName="mall_order" domainObjectName="Order"/>-->
 <!--        <table tableName="mall_order_item" domainObjectName="Orderitem"/>-->
-        <table tableName="mall_user" domainObjectName="User"/>
+        <table tableName="mall_category" domainObjectName="Category"/>
 
     </context>
 </generatorConfiguration>

@@ -1,19 +1,30 @@
 package com.imooc.mall.dao;
 
 import com.imooc.mall.pojo.Category;
-import org.apache.ibatis.annotations.Mapper;
+import com.imooc.mall.pojo.CategoryExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
-/**
- * @author LingChen <lingchen@kuaishou.com>
- * Created on 2020-04-13
- */
-//@Mapper
 public interface CategoryMapper {
+    long countByExample(CategoryExample example);
 
-    @Select("select * from mall_category where id = #{id}")
-    Category findById(@Param("id") Integer id);
+    int deleteByExample(CategoryExample example);
 
-    Category queryById(Integer id);
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Category record);
+
+    int insertSelective(Category record);
+
+    List<Category> selectByExample(CategoryExample example);
+
+    Category selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") Category record, @Param("example") CategoryExample example);
+
+    int updateByExample(@Param("record") Category record, @Param("example") CategoryExample example);
+
+    int updateByPrimaryKeySelective(Category record);
+
+    int updateByPrimaryKey(Category record);
 }

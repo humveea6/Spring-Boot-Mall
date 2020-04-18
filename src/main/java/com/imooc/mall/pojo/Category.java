@@ -2,10 +2,6 @@ package com.imooc.mall.pojo;
 
 import java.util.Date;
 
-/**
- * @author LingChen <lingchen@kuaishou.com>
- * Created on 2020-04-13
- */
 public class Category {
     private Integer id;
 
@@ -42,7 +38,7 @@ public class Category {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public Boolean getStatus() {
@@ -75,18 +71,5 @@ public class Category {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", sortOrder=" + sortOrder +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
     }
 }
