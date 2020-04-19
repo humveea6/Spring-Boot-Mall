@@ -6,7 +6,9 @@ import com.imooc.mall.enums.ResponseEnum;
 import com.imooc.mall.form.CartAddForm;
 import com.imooc.mall.pojo.Cart;
 import com.imooc.mall.pojo.Product;
+import com.imooc.mall.pojo.ProductExample;
 import com.imooc.mall.service.ICartService;
+import com.imooc.mall.vo.CartProductVo;
 import com.imooc.mall.vo.CartVo;
 import com.imooc.mall.vo.ResponseVo;
 import com.mysql.cj.util.StringUtils;
@@ -14,6 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -69,16 +76,63 @@ public class CartServiceImpl implements ICartService {
                 String.valueOf(product.getId()),
                 gson.toJson(cart));
 
-        return null;
+        return listCart(uid);
     }
 
     @Override
     public ResponseVo<CartVo> listCart(Integer uid) {
+        CartVo cartVo = new CartVo();
+        List<CartProductVo> cartProductVoList = new ArrayList<>();
+
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
 
-        String value = opsForHash.get(redisKey, String.valueOf(product.getId()));
+        Map<String, String> entries = opsForHash.entries(redisKey);
 
-        return null;
+        List<Integer> productIdList = new ArrayList<>();
+        for(Map.Entry<String,String> entry:entries.entrySet()){
+            Integer productId = Integer.valueOf(entry.getKey());
+            productIdList.add(productId);
+        }
+
+        ProductExample productExample = new ProductExample();
+        ProductExample.Criteria criteria = productExample.createCriteria();
+        criteria.andIdIn(productIdList);
+        List<Product> productList = productMapper.selectByExample(productExample);
+
+        Boolean selectAll = true;
+        Integer totalQuantity = 0;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for(Product product:productList){
+            Cart cart = gson.fromJson(entries.get(product.getId().toString()),Cart.class);
+
+            totalQuantity += cart.getQuantity();
+
+            if(!cart.getProductSelected()){
+                selectAll = false;
+            }
+
+            CartProductVo cartProductVo = new CartProductVo(product.getId(),
+                    cart.getQuantity(),
+                    product.getName(),
+                    product.getSubtitle(),
+                    product.getMainImage(),
+                    product.getPrice(),
+                    product.getStatus(),
+                    product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+                    product.getStock(),
+                    cart.getProductSelected());
+            if(cartProductVo.getProductSelected()) {
+                totalPrice = totalPrice.add(cartProductVo.getProductTotalPrice());
+            }
+            cartProductVoList.add(cartProductVo);
+        }
+        cartVo.setCartProductVoList(cartProductVoList);
+        cartVo.setSelectedAll(selectAll);
+        cartVo.setCartTotalQuantity(totalQuantity);
+        cartVo.setCartTotalPrice(totalPrice);
+
+        return ResponseVo.success(cartVo);
     }
 }
