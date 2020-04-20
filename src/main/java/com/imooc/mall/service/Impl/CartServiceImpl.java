@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.imooc.mall.dao.ProductMapper;
 import com.imooc.mall.enums.ResponseEnum;
 import com.imooc.mall.form.CartAddForm;
+import com.imooc.mall.form.CartUpdateForm;
 import com.imooc.mall.pojo.Cart;
 import com.imooc.mall.pojo.Product;
 import com.imooc.mall.pojo.ProductExample;
@@ -134,5 +135,107 @@ public class CartServiceImpl implements ICartService {
         cartVo.setCartTotalPrice(totalPrice);
 
         return ResponseVo.success(cartVo);
+    }
+
+    @Override
+    public ResponseVo<CartVo> updateCart(Integer uid, Integer productId, CartUpdateForm cartUpdateForm) {
+
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
+
+        String value = opsForHash.get(redisKey, String.valueOf(productId));
+
+        Cart cart;
+        if(StringUtils.isNullOrEmpty(value)){
+            return ResponseVo.error(ResponseEnum.CART_PRODUCT_NOT_EXIST);
+        }else {
+            cart = gson.fromJson(value, Cart.class);
+            if(cartUpdateForm.getQuantity() != null &&cartUpdateForm.getQuantity() > 0) {
+                cart.setQuantity(cartUpdateForm.getQuantity());
+            }
+            if(cartUpdateForm.getSelected() != null){
+                cart.setProductSelected(cartUpdateForm.getSelected());
+            }
+
+            opsForHash.put(redisKey,
+                    String.valueOf(productId),
+                    gson.toJson(cart));
+        }
+
+        return listCart(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> deleteCart(Integer uid, Integer productId) {
+
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
+
+        String value = opsForHash.get(redisKey, String.valueOf(productId));
+
+        if(StringUtils.isNullOrEmpty(value)){
+            return ResponseVo.error(ResponseEnum.CART_PRODUCT_NOT_EXIST);
+        }else {
+            opsForHash.delete(redisKey,
+                    String.valueOf(productId));
+        }
+
+        return listCart(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> selectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
+
+        for(Cart cart:listForCart(uid)){
+            cart.setProductSelected(true);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    gson.toJson(cart));
+        }
+
+        return listCart(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> unSelectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
+
+        for(Cart cart:listForCart(uid)){
+            cart.setProductSelected(false);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    gson.toJson(cart));
+        }
+
+        return listCart(uid);
+    }
+
+    @Override
+    public ResponseVo<Integer> sum(Integer uid) {
+
+        List<Cart> cartList = listForCart(uid);
+
+        Integer sum = 0;
+        for (Cart cart : cartList) {
+            sum += cart.getQuantity();
+        }
+
+        return ResponseVo.success(sum);
+    }
+
+    private List<Cart> listForCart(Integer uid){
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE,uid);
+
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        List<Cart> cartList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            cartList.add(gson.fromJson(entry.getValue(),Cart.class));
+        }
+        return cartList;
     }
 }
