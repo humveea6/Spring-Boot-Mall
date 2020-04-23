@@ -1,25 +1,35 @@
 package com.imooc.mall.form;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-23
  */
 public class AddressAddForm {
 
+    @NotBlank
     private String receiverName;
 
+    @NotBlank
     private String receiverPhone;
 
+    @NotBlank
     private String receiverMobile;
 
+    @NotBlank
     private String receiverProvince;
 
+    @NotBlank
     private String receiverCity;
 
+    @NotBlank
     private String receiverDistrict;
 
+    @NotBlank
     private String receiverAddress;
 
+    @NotBlank
     private String receiverZip;
 
     public String getReceiverName() {
