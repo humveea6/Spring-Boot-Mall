@@ -1,5 +1,6 @@
 package com.imooc.mall.service.Impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.imooc.mall.dao.OrderMapper;
 import com.imooc.mall.dao.OrderitemMapper;
@@ -22,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -136,7 +138,46 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public ResponseVo<PageInfo> list(Integer uid, Integer pageNum, Integer pageSize) {
-        return null;
+
+        PageHelper.startPage(pageNum,pageSize);
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria()
+                .andUserIdEqualTo(uid);
+        List<Order> orderList = orderMapper.selectByExample(orderExample);
+
+        List<Long> orderNoList = orderList.stream()
+                .map(Order::getOrderNo)
+                .collect(Collectors.toList());
+
+        OrderitemExample orderitemExample = new OrderitemExample();
+        orderitemExample.createCriteria()
+                .andOrderNoIn(orderNoList);
+        List<Orderitem> orderitemList = orderitemMapper.selectByExample(orderitemExample);
+        Map<Long, List<Orderitem>> orderItemMap = orderitemList.stream()
+                .collect(Collectors.groupingBy(Orderitem::getOrderNo));
+
+        List<Integer> shippingIdList = orderList.stream()
+                .map(Order::getShippingId)
+                .collect(Collectors.toList());
+        ShippingExample shippingExample = new ShippingExample();
+        shippingExample.createCriteria()
+                .andIdIn(shippingIdList);
+        List<Shipping> shippingList = shippingMapper.selectByExample(shippingExample);
+
+        Map<Integer, Shipping> shippingMap = shippingList.stream()
+                .collect(Collectors.toMap(Shipping::getId, Function.identity()));
+
+        List<OrderVo> orderVoList = new ArrayList<>();
+        for (Order order : orderList) {
+            OrderVo orderVo = buildOrderVo(order,
+                    orderItemMap.get(order.getOrderNo()),
+                    shippingMap.get(order.getShippingId()));
+            orderVoList.add(orderVo);
+        }
+        PageInfo pageInfo = new PageInfo<>(orderList);
+        pageInfo.setList(orderVoList);
+
+        return ResponseVo.success(pageInfo);
     }
 
     @Override
