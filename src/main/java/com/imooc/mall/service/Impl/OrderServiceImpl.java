@@ -210,12 +210,56 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public ResponseVo cancel(Integer uid, Long orderNo) {
-        return null;
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria()
+                .andOrderNoEqualTo(orderNo);
+        List<Order> orders = orderMapper.selectByExample(orderExample);
+        if(CollectionUtils.isEmpty(orders)){
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+        Order order = orders.get(0);
+        if (order == null || !order.getUserId().equals(uid)) {
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+        //只有[未付款]订单可以取消，看自己公司业务
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            return ResponseVo.error(ResponseEnum.ORDER_STATUS_ERROR);
+        }
+
+        order.setStatus(OrderStatusEnum.CANCELED.getCode());
+        order.setCloseTime(new Date());
+        int row = orderMapper.updateByPrimaryKeySelective(order);
+        if (row <= 0) {
+            return ResponseVo.error(ResponseEnum.ERROR);
+        }
+
+        return ResponseVo.successByMsg();
     }
 
     @Override
     public void paid(Long orderNo) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria()
+                .andOrderNoEqualTo(orderNo);
+        List<Order> orders = orderMapper.selectByExample(orderExample);
+        if(CollectionUtils.isEmpty(orders)){
+            throw new RuntimeException(ResponseEnum.ORDER_NOT_EXIST.getDesc() + "订单id:" + orderNo);
+        }
+        Order order = orders.get(0);
+        if (order == null) {
+            throw new RuntimeException(ResponseEnum.ORDER_NOT_EXIST.getDesc() + "订单id:" + orderNo);
+        }
+        //只有[未付款]订单可以变成[已付款]，看自己公司业务
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            throw new RuntimeException(ResponseEnum.ORDER_STATUS_ERROR.getDesc() + "订单id:" + orderNo);
+        }
 
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setPaymentTime(new Date());
+        int row = orderMapper.updateByPrimaryKeySelective(order);
+        if (row <= 0) {
+            throw new RuntimeException("将订单更新为已支付状态失败，订单id:" + orderNo);
+        }
     }
 
     private OrderVo buildOrderVo(Order order, List<Orderitem> orderItemList, Shipping shipping) {
