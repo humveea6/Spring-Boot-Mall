@@ -15,6 +15,7 @@ import com.imooc.mall.service.IOrderService;
 import com.imooc.mall.vo.OrderItemVo;
 import com.imooc.mall.vo.OrderVo;
 import com.imooc.mall.vo.ResponseVo;
+import com.sun.tools.corba.se.idl.constExpr.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,7 +183,29 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public ResponseVo<OrderVo> detail(Integer uid, Long orderNo) {
-        return null;
+
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria()
+                .andOrderNoEqualTo(orderNo);
+        List<Order> orders = orderMapper.selectByExample(orderExample);
+        if(CollectionUtils.isEmpty(orders)){
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+        Order order = orders.get(0);
+        if(!order.getUserId().equals(uid)){
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+
+        OrderitemExample orderitemExample = new OrderitemExample();
+        orderitemExample.createCriteria()
+                .andOrderNoEqualTo(orderNo);
+        List<Orderitem> orderitemList = orderitemMapper.selectByExample(orderitemExample);
+
+        Shipping shipping = shippingMapper.selectByPrimaryKey(order.getShippingId());
+
+        OrderVo orderVo = buildOrderVo(order, orderitemList, shipping);
+
+        return ResponseVo.success(orderVo);
     }
 
     @Override
