@@ -1,5 +1,6 @@
 package com.imooc.mall.controller;
 
+import com.imooc.mall.annotation.LogRecord;
 import com.imooc.mall.consts.MallConst;
 import com.imooc.mall.enums.ResponseEnum;
 import com.imooc.mall.form.UserLoginform;
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
+    @LogRecord(operator = "#userLoginform.username",pwd = "#userLoginform.password")
     public ResponseVo<User> login(@Valid @RequestBody UserLoginform userLoginform,
                                   BindingResult bindingResult, HttpSession httpSession){
         if(bindingResult.hasErrors()){
