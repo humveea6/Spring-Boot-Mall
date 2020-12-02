@@ -6,8 +6,10 @@ import com.imooc.mall.exception.UserLoginException;
 import com.imooc.mall.pojo.User;
 import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +29,6 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             throw new UserLoginException();
 //            return false;
         }
-
         return true;
     }
 }

@@ -78,7 +78,17 @@ public class CategoryServiceImpl implements ICategoryService {
         findSubCategoryId(id,resultSet,categories);
     }
 
-    private void findSubCategoryId(Integer id, Set<Integer> resultSet,List<Category> categories){
+    @Override
+    public List<Category> getCategory(List<Integer> ids) {
+        return categoryMapper.selectByExampleKeepOrder(ids);
+    }
+
+    @Override
+    public Category getOneCategory(Integer id) {
+        return categoryMapper.selectOneKeepOrder(id);
+    }
+
+    private void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categories){
         for(Category category:categories){
             if(category.getParentId().equals(id)){
                 resultSet.add(category.getId());

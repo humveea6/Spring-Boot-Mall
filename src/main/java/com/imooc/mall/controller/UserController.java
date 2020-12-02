@@ -1,5 +1,7 @@
 package com.imooc.mall.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.imooc.mall.annotation.LogRecord;
 import com.imooc.mall.consts.MallConst;
 import com.imooc.mall.enums.ResponseEnum;
@@ -7,15 +9,23 @@ import com.imooc.mall.form.UserLoginform;
 import com.imooc.mall.form.UserRegisterform;
 import com.imooc.mall.pojo.User;
 import com.imooc.mall.service.IUserService;
+import com.imooc.mall.utils.HlgGsonUtil;
 import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author LingChen <lingchen@kuaishou.com>
@@ -42,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    @LogRecord(operator = "#userLoginform.username",pwd = "#userLoginform.password")
+    @LogRecord
     public ResponseVo<User> login(@Valid @RequestBody UserLoginform userLoginform,
                                   BindingResult bindingResult, HttpSession httpSession){
         if(bindingResult.hasErrors()){
@@ -71,4 +81,19 @@ public class UserController {
         return ResponseVo.success("退出成功");
     }
 
+    public static void main(String[] args) {
+        Map<String, Object> testMap = new HashMap<>();
+        Map<String, Object> certificateMap = new HashMap<>();
+        testMap.put("test",2333);
+        testMap.put("tesgd","gsfsdg");
+        String s = HlgGsonUtil.toJson(testMap);
+        System.out.println(s);
+        if (!StringUtils.isEmpty(s)) {
+            Type type = new TypeToken<Map<String, Object>>() {
+            }.getType();
+            certificateMap = HlgGsonUtil.fromJson(s, type);
+
+        }
+
+    }
 }

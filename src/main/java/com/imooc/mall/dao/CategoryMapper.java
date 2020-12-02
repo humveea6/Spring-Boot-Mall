@@ -4,6 +4,7 @@ import com.imooc.mall.pojo.Category;
 import com.imooc.mall.pojo.CategoryExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface CategoryMapper {
     long countByExample(CategoryExample example);
@@ -27,4 +28,10 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+    @Select("select * from mall_category where id in (#{ids})")
+    List<Category> selectByExampleKeepOrder(@Param("ids") List<Integer> ids);
+
+    @Select("select * from mall_category where id = #{id}")
+    Category selectOneKeepOrder(@Param("id") Integer ids);
 }

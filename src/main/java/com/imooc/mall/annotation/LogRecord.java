@@ -12,11 +12,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogRecord {
-    String operator() default "";
-
-    String pwd() default "";
-
-    long operateTime() default 0;
-
-    int opType() default 0;
 }
