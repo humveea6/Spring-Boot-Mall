@@ -6,7 +6,6 @@ import com.imooc.mall.grpc.userinfoGrpc;
 import io.grpc.stub.StreamObserver;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-08-24
  */
 public class UserInfoService extends userinfoGrpc.userinfoImplBase {

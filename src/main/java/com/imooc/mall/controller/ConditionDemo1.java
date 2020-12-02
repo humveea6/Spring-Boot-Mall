@@ -13,7 +13,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-06-03
  */
 

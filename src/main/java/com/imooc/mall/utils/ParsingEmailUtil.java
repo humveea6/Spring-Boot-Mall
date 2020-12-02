@@ -17,14 +17,14 @@ import java.util.Properties;
 public class ParsingEmailUtil {
 
     public static void main(String[] args) throws Exception{
-        resceive("****@kuaishou.com", "password");
+        resceive("", "password");
     }
 
     public static void resceive(String emailAdress, String password) throws Exception {
 
         try {
             String port = "993";   // 端口号
-            String servicePath = "imap.kuaishou.com";   // 服务器地址
+            String servicePath = "imap.com";   // 服务器地址
 
             Properties props = new Properties();
             props.setProperty("mail.store.protocol", "imaps");

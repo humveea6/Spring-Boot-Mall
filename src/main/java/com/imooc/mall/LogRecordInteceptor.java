@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-08-14
  */
 public class LogRecordInteceptor implements HandlerInterceptor {

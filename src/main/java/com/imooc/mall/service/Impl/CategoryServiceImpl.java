@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 @Service

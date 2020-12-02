@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-07-07
  */
 @RestController

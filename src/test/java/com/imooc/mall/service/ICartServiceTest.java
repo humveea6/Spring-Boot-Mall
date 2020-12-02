@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.Assert.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-19
  */
 @Slf4j

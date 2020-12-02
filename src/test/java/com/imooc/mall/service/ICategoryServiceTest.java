@@ -12,7 +12,6 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 @Slf4j

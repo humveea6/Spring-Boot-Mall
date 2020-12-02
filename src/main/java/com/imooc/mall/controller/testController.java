@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-10-21
  */
 @RestController

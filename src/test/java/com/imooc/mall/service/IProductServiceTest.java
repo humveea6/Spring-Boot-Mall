@@ -15,7 +15,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 public class IProductServiceTest extends MallApplicationTests {

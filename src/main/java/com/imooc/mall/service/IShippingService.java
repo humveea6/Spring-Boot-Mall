@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-23
  */
 public interface IShippingService {

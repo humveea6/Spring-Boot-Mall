@@ -6,7 +6,6 @@ import io.grpc.ServerBuilder;
 import java.io.IOException;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-08-24
  */
 public class GrpcService {

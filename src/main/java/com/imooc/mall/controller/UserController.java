@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 @RestController

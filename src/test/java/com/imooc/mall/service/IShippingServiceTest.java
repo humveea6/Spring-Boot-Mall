@@ -16,7 +16,6 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-23
  */
 @Slf4j

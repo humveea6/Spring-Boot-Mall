@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-08-14
  */
 @Target(ElementType.METHOD)

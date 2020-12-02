@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 @Service

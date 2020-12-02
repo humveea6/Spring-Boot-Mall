@@ -1,7 +1,6 @@
 package com.imooc.mall.pojo;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-19
  */
 public class Cart {

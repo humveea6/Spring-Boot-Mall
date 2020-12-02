@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-17
  */
 @Slf4j

@@ -6,7 +6,6 @@
 //import org.springframework.stereotype.Component;
 //
 ///**
-// * @author LingChen <lingchen@kuaishou.com>
 // * Created on 2020-05-05
 // */
 //@Component

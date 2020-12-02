@@ -1,7 +1,6 @@
 package com.imooc.mall.enums;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 public enum ResponseEnum {

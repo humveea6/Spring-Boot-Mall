@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-13
  */
 @SpringBootTest

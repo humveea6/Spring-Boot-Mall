@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-05-04
  */
 public class OrderVo {

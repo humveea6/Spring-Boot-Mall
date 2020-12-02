@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.Assert.*;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 public class UserServiceImplTest extends MallApplicationTests {
@@ -18,7 +17,7 @@ public class UserServiceImplTest extends MallApplicationTests {
 
     @Test
     public void register() {
-        User user = new User("Jack","123456","jack@kuaishou.com",1);
+        User user = new User("Jack","123456","",1);
 
         iUserService.register(user);
     }

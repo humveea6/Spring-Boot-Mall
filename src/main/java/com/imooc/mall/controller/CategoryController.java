@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 @RestController
