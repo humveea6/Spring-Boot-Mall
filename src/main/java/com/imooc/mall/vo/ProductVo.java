@@ -3,7 +3,6 @@ package com.imooc.mall.vo;
 import java.math.BigDecimal;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 public class ProductVo {

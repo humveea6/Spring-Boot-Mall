@@ -5,7 +5,6 @@ import com.imooc.mall.enums.ResponseEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 @Slf4j

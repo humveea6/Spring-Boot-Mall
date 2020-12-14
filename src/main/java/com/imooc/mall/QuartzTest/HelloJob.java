@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-05-04
  */
 @Component

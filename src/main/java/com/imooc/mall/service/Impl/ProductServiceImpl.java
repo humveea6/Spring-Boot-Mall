@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 @Service

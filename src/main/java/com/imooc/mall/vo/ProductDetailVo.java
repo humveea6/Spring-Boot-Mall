@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-18
  */
 public class ProductDetailVo {

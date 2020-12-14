@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_package = "com.imooc.mall.grpc";
+
+service userinfo{
+
+  rpc login(LoginRequest) returns (Response);
+  rpc logout(Empty) returns (Response);
+}
+
+message LoginRequest{
+
+    string username = 1;
+    string pwd = 2;
+}
+
+message Response{
+
+    string  resMsg = 1;
+    int32  resCode = 2;
+}
+
+message Empty{
+
+}

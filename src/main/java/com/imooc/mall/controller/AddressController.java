@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-23
  */
 @RestController

@@ -5,7 +5,6 @@ import com.imooc.mall.vo.OrderVo;
 import com.imooc.mall.vo.ResponseVo;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-05-04
  */
 public interface IOrderService {

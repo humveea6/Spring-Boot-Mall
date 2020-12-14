@@ -3,7 +3,6 @@ package com.imooc.mall.form;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-19
  */
 public class CartAddForm {

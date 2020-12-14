@@ -1,7 +1,6 @@
 package com.imooc.mall.form;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-20
  */
 public class CartUpdateForm {

@@ -4,7 +4,6 @@ import com.imooc.mall.pojo.User;
 import com.imooc.mall.vo.ResponseVo;
 
 /**
- * @author LingChen <lingchen@kuaishou.com>
  * Created on 2020-04-14
  */
 public interface IUserService {
